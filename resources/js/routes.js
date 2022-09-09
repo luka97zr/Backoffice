@@ -5,6 +5,7 @@ import Users from './pages/users/Users'
 import Settings from './pages/settings/Settings'
 import Login from './pages/auth/Login'
 import NotFound from './pages/404/NotFound'
+import doesCookieExist from './helpers/CookieCheck';
 
 const routes = [
     {
@@ -46,12 +47,25 @@ const routes = [
     {
         path: '/login',
         name: 'login',
-        component: Login
+        component: Login,
     }
 ];
+
 const router = new VueRouter({
     routes,
     mode: 'history'
+});
+
+router.beforeEach((to, from, next) => {
+    if (to.matched.some(record => record.meta.requiresAuth)) {
+        if (doesCookieExist('token') && to.path !== '/login') {
+            next();
+        } else {
+            next({name:'login'});
+        }
+    } else {
+        next();
+    }
 });
 
 export default router;
