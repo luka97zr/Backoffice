@@ -9,12 +9,15 @@ import router from './routes';
 import VueRouter from 'vue-router'
 import Vuetify from 'vuetify';
 import Sidebar from './global/Aside'
+import storeDefinition from './store'
+import Vuex from 'vuex'
 require('./bootstrap');
 
 window.Vue = require('vue').default;
 Vue.component('Sidebar',Sidebar);
 Vue.use(VueRouter);
 Vue.use(Vuetify);
+Vue.use(Vuex);
 
 /**
  * The following block of code may be used to automatically register your
@@ -29,6 +32,8 @@ Vue.use(Vuetify);
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 
+const store = new Vuex.Store(storeDefinition);
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -42,6 +47,7 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 const app = new Vue({
     el: '#app',
     router,
+    store,
     vuetify: new Vuetify(),
     components: {
         'index': Index

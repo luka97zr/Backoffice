@@ -4,27 +4,44 @@ import Profile from './pages/profile/Profile'
 import Users from './pages/users/Users'
 import Settings from './pages/settings/Settings'
 import Login from './pages/auth/Login'
+import NotFound from './pages/404/NotFound'
 
 const routes = [
     {
         path: '/',
         name: 'dashboard',
-        component: Dashboard
+        component: Dashboard,
+        meta: {
+            requiresAuth: true
+        }
     },
     {
         path: '/profile',
         name: 'profile',
-        component: Profile
+        component: Profile,
+        meta: {
+            requiresAuth: true
+        }
     },
     {
         path: '/users',
         name: 'users',
-        component: Users
+        component: Users,
+        meta: {
+            requiresAuth: true
+        }
     },
     {
         path: '/settings',
         name: 'settings',
-        component: Settings
+        component: Settings,
+        meta: {
+            requiresAuth: true
+        }
+    },
+    {
+        path: '*',
+        component: NotFound,
     },
     {
         path: '/login',
