@@ -13,6 +13,7 @@ class User extends Authenticatable implements JWTSubject
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+
     /**
      * The attributes that are mass assignable.
      *
@@ -32,6 +33,10 @@ class User extends Authenticatable implements JWTSubject
     protected $hidden = [
         'password',
         'remember_token',
+        'created_at',
+        'updated_at',
+        'deleted_at',
+        'email_verified_at'
     ];
 
     /**
@@ -63,5 +68,9 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    public function role() {
+        return $this->belongsTo(Role::class);
     }
 }
