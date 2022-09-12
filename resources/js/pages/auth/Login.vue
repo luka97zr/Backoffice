@@ -33,7 +33,7 @@
                             </v-card-text>
                             <v-card-actions>
                                 <v-spacer></v-spacer>
-                                <v-btn color="primary" to="/" @click="login()"
+                                <v-btn :loading="!loaded" color="primary" to="/" @click="login()"
                                     >Login</v-btn
                                 >
                             </v-card-actions>
@@ -60,6 +60,7 @@ export default {
             passwordRules: [(v) => !!v || "Password is required"],
             errors: null,
             valid: false,
+            loaded: true
         };
    },
    created() {
@@ -70,12 +71,15 @@ export default {
          try {
                this.errors = null;
                if (!this.validate) return;
+               this.loaded = false;
                await axios.post("/api/login", {
                   email: this.email,
                   password: this.password,
                });
+               this.loaded = true;
                this.$router.push({ path: "/" });
          } catch (error) {
+               this.loaded = true;
                this.errors = error.response.data?.message;
          }
       },
