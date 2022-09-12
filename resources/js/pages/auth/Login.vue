@@ -33,8 +33,8 @@
                             </v-card-text>
                             <v-card-actions>
                                 <v-spacer></v-spacer>
-                                <v-btn :loading="!loaded" color="primary" to="/" @click="login()"
-                                    >Login</v-btn
+                                <v-btn :loading="!loaded" color="primary" to="/"
+                                    @click="login()" >Login</v-btn
                                 >
                             </v-card-actions>
                         </v-card>

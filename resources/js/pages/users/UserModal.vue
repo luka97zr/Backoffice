@@ -1,60 +1,91 @@
 <template>
-    <div class="modal" id="modalRegisterForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-  aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold">Sign up</h4>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body mx-3">
-        <div class="md-form mb-5">
-          <i class="fas fa-user prefix grey-text"></i>
-          <input type="text" id="orangeForm-name" class="form-control validate">
-          <label data-error="wrong" data-success="right" for="orangeForm-name">Your name</label>
-        </div>
-        <div class="md-form mb-5">
-          <i class="fas fa-envelope prefix grey-text"></i>
-          <input type="email" id="orangeForm-email" class="form-control validate">
-          <label data-error="wrong" data-success="right" for="orangeForm-email">Your email</label>
-        </div>
-
-        <div class="md-form mb-4">
-          <i class="fas fa-lock prefix grey-text"></i>
-          <input type="password" id="orangeForm-pass" class="form-control validate">
-          <label data-error="wrong" data-success="right" for="orangeForm-pass">Your password</label>
-        </div>
-
-      </div>
-      <div class="modal-footer d-flex justify-content-center">
-        <button class="btn btn-deep-orange">Sign up</button>
-      </div>
+    <div class="dashboard">
+        <Sidebar></Sidebar>
+        <template>
+            <v-row justify="center">
+                <v-dialog v-model="dialog" persistent max-width="600px">
+                    <v-card>
+                        <v-card-title>
+                            <span class="text-h5">User Profile</span>
+                        </v-card-title>
+                        <v-card-text>
+                            <v-container>
+                                <v-row>
+                                    <v-col>
+                                        <v-text-field
+                                            label="Name*"
+                                            required
+                                            v-model="name"
+                                        ></v-text-field>
+                                    </v-col>
+                                    <v-col cols="12">
+                                        <v-text-field
+                                            label="Email*"
+                                            required
+                                            v-model="email"
+                                        ></v-text-field>
+                                    </v-col>
+                                    <v-col cols="12" sm="6">
+                                        <v-select
+                                            :items="roles"
+                                            label="Role*"
+                                            required
+                                            item-text="name"
+                                            item-value="id"
+                                            v-model="roleId"
+                                        ></v-select>
+                                    </v-col>
+                                </v-row>
+                            </v-container>
+                            <small>*indicates required field</small>
+                        </v-card-text>
+                        <v-card-actions>
+                            <v-spacer></v-spacer>
+                            <v-btn
+                                color="blue darken-1"
+                                text
+                                @click="$emit('closeDialog')"
+                            >
+                                Close
+                            </v-btn>
+                            <v-btn
+                                color="blue darken-1"
+                                text
+                                @click="$emit('closeDialog')"
+                            >
+                                Save
+                            </v-btn>
+                        </v-card-actions>
+                    </v-card>
+                </v-dialog>
+            </v-row>
+        </template>
     </div>
-  </div>
-  </div>
 </template>
-
 <script>
 export default {
-  name: "UserModal",
-  props: ['item', 'dialog', 'test'],
-  data() {
-    return {
-      name: null,
-      email: null,
-    };
-  },
-  computed: {
-    proba() {
-        if(test) {
-        this.name = test;
-    }
-    }
-  }
+    name: "UserModal",
+    props: ["item", "dialog", "roles"],
+    data() {
+        return {
+            name: null,
+            email: null,
+            roleId: null,
+        };
+    },
+    methods: {
+        populateFields() {
+            this.name = this.item.name;
+            this.email = this.item.email;
+            this.roleId = this.item.role.id
+        },
+    },
+    watch: {
+        dialog: {
+            handler() {
+                this.populateFields();
+            },
+        },
+    },
 };
 </script>
-
-<style>
-</style>

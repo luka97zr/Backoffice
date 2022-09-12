@@ -5,7 +5,7 @@ import Vuetify from 'vuetify';
 import Sidebar from './global/Aside'
 import storeDefinition from './store'
 import Vuex from 'vuex'
-import axios from 'axios';
+
 require('./bootstrap');
 
 window.Vue = require('vue').default;
@@ -40,5 +40,5 @@ const app = new Vue({
     vuetify: new Vuetify(),
     components: {
         'index': Index
-    }
+    },
 });

@@ -6,6 +6,11 @@ import Settings from './pages/settings/Settings'
 import Login from './pages/auth/Login'
 import NotFound from './pages/404/NotFound'
 import doesCookieExist from './helpers/CookieCheck';
+import Logout from './pages/auth/Logout'
+import Vue from 'vue'
+import Vuex from 'vuex'
+
+Vue.use(Vuex)
 
 const routes = [
     {
@@ -48,6 +53,14 @@ const routes = [
         path: '/login',
         name: 'login',
         component: Login,
+    },
+    {
+        path: '/logout',
+        name: 'logout',
+        component: Logout,
+        meta: {
+            requiresAuth: true
+        }
     }
 ];
 
@@ -56,9 +69,12 @@ const router = new VueRouter({
     mode: 'history'
 });
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
     if (to.matched.some(record => record.meta.requiresAuth)) {
         if (doesCookieExist('token') && to.path !== '/login') {
+            if (Object.keys(router.app.$store.state.user).length <= 0) {
+                router.app.$store.dispatch('getUser');
+            }
             next();
         } else {
             next({name:'login'});

@@ -5,7 +5,7 @@
       <h3>Users</h3>
     </v-subheader>
     <template>
-      <v-simple-table fixed-header height="300px">
+      <v-simple-table fixed-header height="auto">
         <template v-slot:default>
           <thead>
             <tr>
@@ -26,29 +26,33 @@
                 <v-icon small class="mr-2" @click="editItem(item)">
                   mdi-pencil
                 </v-icon>
-                <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
+                <v-icon small> mdi-delete </v-icon>
               </td>
             </tr>
           </tbody>
         </template>
       </v-simple-table>
     </template>
-    <user-modal :item="editedItem" :dialog="dialog" :test="'Luka'"></user-modal>
+      <pagination :length="numOfPages" @switchPage="getUsers()" ref="pagination"></pagination>
+    <user-modal :item="editedItem" :dialog="dialog" @closeDialog="dialog=false" :roles="$store.state.roles"></user-modal>
   </div>
 </template>
 
 <script>
 import UserModal from './UserModal.vue';
+import Pagination from '../../components/Pagination.vue'
 export default {
+  name: 'Users',
     components: {
-        UserModal
+        UserModal,
+        Pagination
     },
   data: () => ({
-    roles: ["Admin", "Subscriber", "User"],
     dialog: false,
     dialogDelete: false,
     errors: null,
     allUsers: [],
+    numOfPages: null,
     headers: [
       {
         text: "Name",
@@ -88,19 +92,19 @@ export default {
     dialog(val) {
       val || this.close();
     },
-    dialogDelete(val) {
-      val || this.closeDelete();
-    },
   },
-
-  created() {
+  mounted() {
     this.getUsers();
+    if (this.$store.state.roles <= 0) {
+      this.$store.dispatch('getRoles');
+    }
   },
-
   methods: {
     async getUsers() {
       try {
-        this.allUsers = (await axios.get("/api/user")).data;
+        const data = (await axios.get(`/api/user?page=${this.$refs.pagination.page}`)).data;
+        this.allUsers = data.data
+        this.numOfPages = data.last_page;
       } catch (error) {
         this.errors = error.response.data;
       }
@@ -110,42 +114,13 @@ export default {
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
     },
-
-    deleteItem(item) {
-      this.editedIndex = this.allUsers.indexOf(item);
-      this.editedItem = Object.assign({}, item);
-      this.dialogDelete = true;
-    },
-
-    deleteItemConfirm() {
-      this.allUsers.splice(this.editedIndex, 1);
-      this.closeDelete();
-    },
-
     close() {
       this.dialog = false;
       this.$nextTick(() => {
         this.editedItem = Object.assign({}, this.defaultItem);
         this.editedIndex = -1;
       });
-    },
-
-    closeDelete() {
-      this.dialogDelete = false;
-      this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
-      });
-    },
-
-    save() {
-      if (this.editedIndex > -1) {
-        Object.assign(this.allUsers[this.editedIndex], this.editedItem);
-      } else {
-        this.allUsers.push(this.editedItem);
-      }
-      this.close();
-    },
+    }
   },
 };
 </script>

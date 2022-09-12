@@ -15,7 +15,7 @@ class RoleFactory extends Factory
     {
         $roles = ['Admin', 'User', 'Subscriber'];
         return [
-            'name' => $roles[round(rand(0,2))],
+            'name' => $roles[round(rand(1,2))],
             'slug' => 'test'
         ];
     }
