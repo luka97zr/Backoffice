@@ -65,7 +65,6 @@ class User extends Authenticatable implements JWTSubject
      *
      * @return array
      */
-    
     public function getJWTCustomClaims()
     {
         return [
@@ -77,7 +76,13 @@ class User extends Authenticatable implements JWTSubject
         ];
     }
 
-    public function role() {
+    public function role()
+    {
         return $this->belongsTo(Role::class);
+    }
+
+    public function setPasswordAttribute($value)
+    {
+        return $this->attributes['password'] = bcrypt($value);
     }
 }

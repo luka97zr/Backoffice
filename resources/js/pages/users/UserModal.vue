@@ -76,7 +76,7 @@ export default {
     methods: {
         populateFields() {
             this.name = this.item.name;
-            this.email = this.item.email;
+            this.email = this.oldEmail = this.item.email;
             this.roleId = this.item.role.id
         },
     },

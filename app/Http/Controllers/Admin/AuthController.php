@@ -40,6 +40,6 @@ class AuthController extends Controller
     }
 
     public function getUser() {
-        return response()->json(auth()->user());
+        return response()->json(Auth::user()->load(['role']));
     }
 }
