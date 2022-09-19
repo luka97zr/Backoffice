@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -40,6 +41,6 @@ class AuthController extends Controller
     }
 
     public function getUser() {
-        return response()->json(Auth::user()->load(['role']));
+        return response()->json(Auth::user()->load(['role.rolePermission.permission']));
     }
 }

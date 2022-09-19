@@ -21,19 +21,19 @@
               <td>{{ item.name }}</td>
               <td>{{ item.username }}</td>
               <td>{{ item.email }}</td>
-              <td>{{ item.role.name }}</td>
+              <td >{{ item.role.name }}</td>
               <td>
-                <v-icon small class="mr-2" @click="editItem(item)">
+                <v-icon small class="mr-2" @click="editItem(item)" v-if="checkPermission('edit_user')">
                   mdi-pencil
                 </v-icon>
-                <v-icon small> mdi-delete </v-icon>
+                <v-icon small v-if="checkPermission('delete_user')"> mdi-delete </v-icon>
               </td>
             </tr>
           </tbody>
         </template>
       </v-simple-table>
     </template>
-      <pagination :length="numOfPages" @switchPage="getUsers()" ref="pagination"></pagination>
+    <pagination :length="numOfPages" @switchPage="getUsers()" ref="pagination"></pagination>
     <user-modal :item="editedItem" :dialog="dialog" @closeDialog="dialog=false" :roles="$store.state.roles"></user-modal>
   </div>
 </template>
@@ -41,12 +41,14 @@
 <script>
 import UserModal from './UserModal.vue';
 import Pagination from '../../components/Pagination.vue'
+import UserPermission from '../../mixins/UserPermission';
 export default {
   name: 'Users',
-    components: {
-        UserModal,
-        Pagination
-    },
+  components: {
+      UserModal,
+      Pagination
+  },
+  mixins: [UserPermission],
   data: () => ({
     dialog: false,
     dialogDelete: false,
@@ -65,24 +67,23 @@ export default {
       { text: "Role", value: "role.name" },
       { text: "Actions", value: "actions", sortable: false },
     ],
-    desserts: [],
-    editedIndex: -1,
-    editedItem: {
-      name: "",
-      calories: 0,
-      email: 0,
-      role: 0,
-      protein: 0,
-    },
-    defaultItem: {
-      name: "",
-      calories: 0,
-      email: 0,
-      role: 0,
-      protein: 0,
-    },
+      desserts: [],
+      editedIndex: -1,
+      editedItem: {
+        name: "",
+        calories: 0,
+        email: 0,
+        role: 0,
+        protein: 0,
+      },
+      defaultItem: {
+        name: "",
+        calories: 0,
+        email: 0,
+        role: 0,
+        protein: 0,
+      },
   }),
-
   computed: {
     formTitle() {
       return this.editedIndex === -1 ? "New Item" : "Edit Item";

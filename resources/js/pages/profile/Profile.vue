@@ -63,7 +63,6 @@
 
 <script>
 import ClearMessage from '../../mixins/ClearMessage';
-import clearMessage from '../../mixins/ClearMessage'
 export default {
     data() {
         return {

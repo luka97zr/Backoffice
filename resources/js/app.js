@@ -7,6 +7,7 @@ import SuccessMsg from './components/SuccessMsg'
 import storeDefinition from './store'
 import Vuex from 'vuex'
 
+
 require('./bootstrap');
 
 window.Vue = require('vue').default;
