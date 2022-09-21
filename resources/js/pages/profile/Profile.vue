@@ -96,7 +96,7 @@ export default {
                 this.errors = null;
                 if(!this.validate) return;
                 this.loaded = false;
-                await axios.put(`/api/user/${this.userId}`, {
+                await axios.post(`/api/profile`, {
                     name: this.name,
                     email: this.email,
                     password: this.password

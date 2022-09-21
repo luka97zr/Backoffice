@@ -26,7 +26,7 @@
                 <v-icon small class="mr-2" @click="editItem(item)" v-if="checkPermission('edit_user')">
                   mdi-pencil
                 </v-icon>
-                <v-icon small v-if="checkPermission('delete_user')"> mdi-delete </v-icon>
+                <v-icon small v-if="checkPermission('delete_user')" @click="deleteUser(item.id)"> mdi-delete </v-icon>
               </td>
             </tr>
           </tbody>
@@ -34,7 +34,7 @@
       </v-simple-table>
     </template>
     <pagination :length="numOfPages" @switchPage="getUsers()" ref="pagination"></pagination>
-    <user-modal :item="editedItem" :dialog="dialog" @closeDialog="dialog=false" :roles="$store.state.roles"></user-modal>
+    <user-modal :user="editedItem" :dialog="dialog" @closeDialog="dialog=false" :roles="$store.state.roles"></user-modal>
   </div>
 </template>
 
@@ -55,34 +55,8 @@ export default {
     errors: null,
     allUsers: [],
     numOfPages: null,
-    headers: [
-      {
-        text: "Name",
-        align: "start",
-        sortable: false,
-        value: "name",
-      },
-      { text: "Username", value: "calories" },
-      { text: "Email", value: "email" },
-      { text: "Role", value: "role.name" },
-      { text: "Actions", value: "actions", sortable: false },
-    ],
-      desserts: [],
       editedIndex: -1,
-      editedItem: {
-        name: "",
-        calories: 0,
-        email: 0,
-        role: 0,
-        protein: 0,
-      },
-      defaultItem: {
-        name: "",
-        calories: 0,
-        email: 0,
-        role: 0,
-        protein: 0,
-      },
+      editedItem:{}
   }),
   computed: {
     formTitle() {
@@ -108,6 +82,14 @@ export default {
         this.numOfPages = data.last_page;
       } catch (error) {
         this.errors = error.response.data;
+      }
+    },
+    async deleteUser(user) {
+      try {
+        await axios.delete(`api/user/${user}`);
+        this.getUsers();
+      } catch(error) {
+        console.log(error);
       }
     },
     editItem(item) {

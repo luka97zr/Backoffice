@@ -51,7 +51,7 @@
                             <v-btn
                                 color="blue darken-1"
                                 text
-                                @click="$emit('closeDialog')"
+                                @click="updateUser()"
                             >
                                 Save
                             </v-btn>
@@ -65,7 +65,7 @@
 <script>
 export default {
     name: "UserModal",
-    props: ["item", "dialog", "roles"],
+    props: ["user", "dialog", "roles"],
     data() {
         return {
             name: null,
@@ -75,10 +75,17 @@ export default {
     },
     methods: {
         populateFields() {
-            this.name = this.item.name;
-            this.email = this.oldEmail = this.item.email;
-            this.roleId = this.item.role.id
+            this.name = this.user.name;
+            this.email = this.oldEmail = this.user.email;
+            this.roleId = this.user.role.id
         },
+        async updateUser() {
+            axios.put(`/api/user/${this.user.id}`, {
+                name: this.user.name,
+                email: this.user.email,
+                role: this.user.role.id,
+            })
+        }
     },
     watch: {
         dialog: {

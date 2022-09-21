@@ -25,6 +25,8 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+        Gate::define('update_profile', function($user) {
+            return $user->email === 'balistreri.percival@example.org1';
+        });
     }
 }
