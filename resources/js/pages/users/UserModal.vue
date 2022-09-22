@@ -81,10 +81,11 @@ export default {
         },
         async updateUser() {
             axios.put(`/api/user/${this.user.id}`, {
-                name: this.user.name,
-                email: this.user.email,
-                role: this.user.role.id,
-            })
+                name: this.name,
+                email: this.email,
+                role_id: this.roleId,
+            });
+            this.$emit('userUpdated')
         }
     },
     watch: {

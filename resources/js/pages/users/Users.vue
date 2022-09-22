@@ -32,9 +32,10 @@
           </tbody>
         </template>
       </v-simple-table>
+    <Success v-if="success" msg="Updated Successfully"></Success>
     </template>
     <pagination :length="numOfPages" @switchPage="getUsers()" ref="pagination"></pagination>
-    <user-modal :user="editedItem" :dialog="dialog" @closeDialog="dialog=false" :roles="$store.state.roles"></user-modal>
+    <user-modal :user="editedItem" :dialog="dialog" @closeDialog="dialog=false" :roles="$store.state.roles" @userUpdated="updateUserTable()"></user-modal>
   </div>
 </template>
 
@@ -42,21 +43,24 @@
 import UserModal from './UserModal.vue';
 import Pagination from '../../components/Pagination.vue'
 import UserPermission from '../../mixins/UserPermission';
+import ClearMessage from '../../mixins/ClearMessage';
+
 export default {
   name: 'Users',
   components: {
       UserModal,
       Pagination
   },
-  mixins: [UserPermission],
+  mixins: [UserPermission, ClearMessage],
   data: () => ({
     dialog: false,
     dialogDelete: false,
     errors: null,
     allUsers: [],
     numOfPages: null,
-      editedIndex: -1,
-      editedItem:{}
+    editedIndex: -1,
+    editedItem:{},
+  success: false,
   }),
   computed: {
     formTitle() {
@@ -91,6 +95,12 @@ export default {
       } catch(error) {
         console.log(error);
       }
+    },
+    updateUserTable() {
+      this.dialog = false;
+      this.getUsers();
+      this.success = true;
+      this.clearMessage(1000);
     },
     editItem(item) {
       this.editedIndex = this.allUsers.indexOf(item);

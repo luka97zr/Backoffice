@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateProfileRequest;
+use App\Http\Requests\UpdateUserRequest;
 use App\Models\Permission;
 use App\Models\User;
 use App\Services\GateService;
@@ -20,11 +21,11 @@ class UserController extends Controller
         return User::where('id', '!=', auth()->user()->id)->with('role')->paginate(5);
     }
 
-    public function update(UpdateProfileRequest $request, User $user)
+    public function update(UpdateUserRequest $request, User $user)
     {
         try {
             $this->gate->isAllowed(Permission::CAN_EDIT_USER);
-            User::findOrFail($user->id)->update($request->only(['email', 'name', 'password']));
+            User::findOrFail($user->id)->update($request->only(['email', 'name', 'role_id']));
         } catch(\Exception $e) {
             return $e->getMessage();
         }
