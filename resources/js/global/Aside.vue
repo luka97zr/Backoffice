@@ -1,9 +1,14 @@
 <template>
   <v-navigation-drawer app>
       <div class="text-center">
-        <h2 class="white--text">Web Burden</h2>
+        <v-row>
+          <v-col>
+            <h4 class="black--text">{{$store.state.user.name}}</h4>
+          </v-col>
+        </v-row>
       </div>
     <v-divider></v-divider>
+      <dropdown></dropdown>
     <v-list>
       <v-list-item v-for="(entry, index) in links" :key="index">
         <v-list-item-icon>
@@ -22,8 +27,9 @@
 </template>
 
 <script>
+import Dropdown from './Dropdown.vue'
 export default {
-  // name: "Sidebar",
+  name: "Sidebar",
   data() {
     return {
       links: [
@@ -43,9 +49,9 @@ export default {
           title: 'Users'
         },
         {
-          page: '/settings',
+          page: '/type',
           icon: 'mdi-cog',
-          title: 'Settings'
+          title: ' Type'
         },
         {
           page: '/logout',
@@ -55,6 +61,30 @@ export default {
       ]
     };
   },
+  components: {
+    Dropdown
+  },
+  computed: {
+    contentTypes() {
+       return this.$store.state.contentTypes;
+    },
+  },
+  methods: {
+      async test() {
+        await this.contentTypes.forEach(type => {
+        this.links.push({
+          page: `content/${type.slug}`,
+          title: `${type.name}`
+        })
+      })
+    }
+  },
+  async created() {
+    if (this.$store.state.contentTypes.length <= 0) {
+      await this.$store.dispatch('getContentType')
+    }
+    this.test()
+  }
 };
 </script>
 

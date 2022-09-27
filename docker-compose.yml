@@ -1,49 +1,42 @@
-version: "3.7"
+version: '3'
+
 services:
   app:
     build:
-      args:
-        user: sammy
-        uid: 1000
-      context: ./
+      context: app
       dockerfile: Dockerfile
-    image: travellist
-    container_name: travellist-app
-    restart: unless-stopped
-    working_dir: /var/www/
+    container_name: app
     volumes:
-      - ./:/var/www
+      - .:/var/www
     networks:
-      - travellist
+      - ahs-net
+    depends_on:
+      - nginx
+      - redis
 
-  db:
-    image: mysql:8.0
-    container_name: travellist-db
-    restart: unless-stopped
-    environment:
-      MYSQL_DATABASE: ${DB_DATABASE}
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-      MYSQL_PASSWORD: ${DB_PASSWORD}
-      MYSQL_USER: ${DB_USERNAME}
-      SERVICE_TAGS: dev
-      SERVICE_NAME: mysql
-    volumes:
-      - ./docker-compose/mysql:/docker-entrypoint-initdb.d
+  redis:
+    image: redis:alpine
+    container_name: redis
+    expose:
+      - 6379
     networks:
-      - travellist
+      - ahs-net
+    depends_on:
+      - nginx  
 
   nginx:
-    image: nginx:alpine
-    container_name: travellist-nginx
-    restart: unless-stopped
+    build: nginx
+    container_name: nginx
+    restart: always
+    tty: true
     ports:
-      - 8000:80
+      - "8000:80"
     volumes:
-      - ./:/var/www
-      - ./docker-compose/nginx:/etc/nginx/conf.d/
+      - .:/var/www
     networks:
-      - travellist
+      - ahs-net
+
 
 networks:
-  travellist:
+  ahs-net:
     driver: bridge

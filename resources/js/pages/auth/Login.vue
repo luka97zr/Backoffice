@@ -76,6 +76,7 @@ export default {
                   email: this.email,
                   password: this.password,
                });
+               this.$store.commit('setLoggedIn', true);
                this.loaded = true;
                this.$router.push({ path: "/" });
          } catch (error) {

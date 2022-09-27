@@ -2,7 +2,8 @@ import VueRouter from 'vue-router';
 import Dashboard from './pages/dashboard/Panel'
 import Profile from './pages/profile/Profile'
 import Users from './pages/users/Users'
-import Settings from './pages/settings/Settings'
+import Type from './pages/type/Type'
+import Content from './pages/content/Content'
 import Login from './pages/auth/Login'
 import NotFound from './pages/404/NotFound'
 import doesCookieExist from './helpers/CookieCheck';
@@ -38,9 +39,16 @@ const routes = [
         }
     },
     {
-        path: '/settings',
-        name: 'settings',
-        component: Settings,
+        path: '/type',
+        name: 'type',
+        component: Type,
+        meta: {
+            requiresAuth: true
+        }
+    },
+    {
+        path: '/content/:type',
+        component: Content,
         meta: {
             requiresAuth: true
         }
@@ -82,6 +90,8 @@ router.beforeEach(async (to, from, next) => {
     } else {
         next();
     }
+
+
 });
 
 export default router;

@@ -6,6 +6,7 @@ export default {
         roles: [],
         user: {},
         loggedIn: false,
+        contentTypes: []
     },
     mutations: {
         setState(state, payload) {
@@ -16,6 +17,9 @@ export default {
         },
         setLoggedIn(state, payload) {
             state.loggedIn = payload;
+        },
+        setContentTypes(state, payload) {
+            state.contentTypes = payload;
         }
     },
     actions: {
@@ -32,6 +36,14 @@ export default {
                 const user = (await axios.get('/api/authUser')).data;
                 commit('setUser', user);
             } catch (error) {
+                console.log(error);
+            }
+        },
+        async getContentType({commit}) {
+            try {
+                const contentTypes = (await axios.get('/api/contentType')).data;
+                commit('setContentTypes', contentTypes);
+            } catch(error) {
                 console.log(error);
             }
         }

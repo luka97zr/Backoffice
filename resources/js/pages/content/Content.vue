@@ -1,7 +1,6 @@
 <template>
-    <div class="dashboard">
-        <Sidebar></Sidebar>
-        Settings
+    <div>
+         {{this.$route.params.type}}
     </div>
 </template>
 
