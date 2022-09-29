@@ -3,7 +3,8 @@ import Dashboard from './pages/dashboard/Panel'
 import Profile from './pages/profile/Profile'
 import Users from './pages/users/Users'
 import Type from './pages/type/Type'
-import Content from './pages/content/Content'
+import ContentWrapper from './pages/content/ContentWrapper'
+import ContentBody from './pages/content/ContentBody'
 import Login from './pages/auth/Login'
 import NotFound from './pages/404/NotFound'
 import doesCookieExist from './helpers/CookieCheck';
@@ -47,8 +48,15 @@ const routes = [
         }
     },
     {
+        path: '/content',
+        component: ContentWrapper,
+        meta: {
+            requiresAuth: true
+        },
+    },
+    {
         path: '/content/:type',
-        component: Content,
+        component: ContentBody,
         meta: {
             requiresAuth: true
         }

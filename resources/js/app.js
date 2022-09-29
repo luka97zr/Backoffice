@@ -3,6 +3,7 @@ import router from './routes';
 import VueRouter from 'vue-router'
 import Vuetify from 'vuetify';
 import Sidebar from './global/Aside'
+import ContentWrapper from './pages/content/ContentWrapper'
 import SuccessMsg from './components/SuccessMsg'
 import storeDefinition from './store'
 import Vuex from 'vuex'
@@ -12,6 +13,7 @@ require('./bootstrap');
 
 window.Vue = require('vue').default;
 Vue.component('Sidebar',Sidebar);
+Vue.component('ContentWrapper',ContentWrapper);
 Vue.component('Success',SuccessMsg);
 Vue.use(VueRouter);
 Vue.use(Vuetify);

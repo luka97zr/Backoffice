@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Admin\ContentController;
 use App\Http\Controllers\Admin\ContentTypeController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\RoleController;
@@ -16,6 +17,7 @@ Route::middleware('auth:api')->group(function() {
     Route::get('authUser', [AuthController::class, 'getUser']);
     Route::get('logout',[AuthController::class, 'logout']);
     Route::apiResource('contentType', ContentTypeController::class);
+    Route::apiResource('content', ContentController::class);
 
 });
 

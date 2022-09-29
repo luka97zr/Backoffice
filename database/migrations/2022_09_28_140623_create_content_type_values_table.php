@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateContentValuesTable extends Migration
+class CreateContentTypeValuesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,10 @@ class CreateContentValuesTable extends Migration
      */
     public function up()
     {
-        Schema::create('content_values', function (Blueprint $table) {
+        Schema::create('content_type_values', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('slug');
-            $table->string('type');
-            $table->uuid('uuid');
-            $table->timestamps();
+            $table->foreignId('content_type_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('content_value_id')->constrained()->cascadeOnDelete();
         });
     }
 
@@ -30,6 +27,6 @@ class CreateContentValuesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('content_values');
+        Schema::dropIfExists('content_type_values');
     }
 }
